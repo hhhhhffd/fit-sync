@@ -304,6 +304,4 @@ make clean      # удалить бинарники, БД, логи, кэши
 
 ## Deliverables
 
-- [ ] [Demo Video / Pitch](#)
-- [ ] [Presentation](#)
-- [ ] [Live Demo](#)
+*Soon...*
