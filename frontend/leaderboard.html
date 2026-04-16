@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Лидерборд - Fitness App</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        .page-title {
+            margin-bottom: 2rem;
+        }
+        .page-title h2 {
+            background: linear-gradient(90deg, var(--amber-start), var(--amber-end));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 1.75rem;
+        }
+        .leaderboard-item.top-1 {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.15) 0%, rgba(253, 230, 138, 0.1) 100%);
+            border-color: rgba(245, 158, 11, 0.4);
+        }
+        .leaderboard-item.top-2 {
+            background: linear-gradient(135deg, rgba(192, 192, 192, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+            border-color: rgba(192, 192, 192, 0.3);
+        }
+        .leaderboard-item.top-3 {
+            background: linear-gradient(135deg, rgba(205, 127, 50, 0.1) 0%, rgba(255, 200, 150, 0.05) 100%);
+            border-color: rgba(205, 127, 50, 0.3);
+        }
+        .rank-badge {
+            font-size: 1.5rem;
+            margin-right: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <script src="js/app.js"></script>
+    <header>
+        <div class="container">
+            <h1>🔥 Fitness App</h1>
+            <nav>
+                <a href="dashboard.html">Дашборд</a>
+                <a href="profile.html">Профиль</a>
+                <a href="challenges.html">Челленджи</a>
+                <a href="leaderboard.html">Лидерборд</a>
+                <a href="#" onclick="logout()">Выход</a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="page-title">
+            <h2>🏆 Лидерборд</h2>
+        </div>
+
+        <div class="tabs">
+            <button class="tab active" onclick="loadLeaderboard('wins')">🏆 Топ победителей</button>
+            <button class="tab" onclick="loadLeaderboard('streak')">🔥 Лучшие серии</button>
+        </div>
+
+        <div id="leaderboardList"></div>
+    </div>
+
+    <script>
+        checkAuth();
+
+        async function loadLeaderboard(type = 'wins') {
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            event?.target?.classList?.add('active');
+
+            try {
+                const leaderboard = await apiCall(`/leaderboard?type=${type}`);
+                const list = document.getElementById('leaderboardList');
+
+                if (leaderboard.length === 0) {
+                    list.innerHTML = '<p class="text-center" style="color: var(--text-muted); padding: 2rem;">Пока нет участников. Будь первым! 💪</p>';
+                    return;
+                }
+
+                let valueField = type === 'streak' ? 'best_streak' : 'total_wins';
+
+                list.innerHTML = leaderboard.map(entry => {
+                    let rankClass = '';
+                    let rankBadge = '';
+                    
+                    if (entry.rank === 1) {
+                        rankClass = 'top-1';
+                        rankBadge = '🥇';
+                    } else if (entry.rank === 2) {
+                        rankClass = 'top-2';
+                        rankBadge = '🥈';
+                    } else if (entry.rank === 3) {
+                        rankClass = 'top-3';
+                        rankBadge = '🥉';
+                    }
+
+                    const rankDisplay = rankBadge 
+                        ? `<span class="rank-badge">${rankBadge}</span>` 
+                        : `<span class="rank">#${entry.rank}</span>`;
+
+                    return `
+                        <div class="leaderboard-item ${rankClass}">
+                            <div class="rank ${entry.rank <= 3 ? ['', 'gold', 'silver', 'bronze'][entry.rank] : ''}">${rankBadge || '#' + entry.rank}</div>
+                            <div class="user-info">
+                                <h4>${entry.name || entry.login || 'User #' + entry.id}</h4>
+                                <div class="meta">@${entry.login || 'anonymous'}</div>
+                            </div>
+                            <div class="score">${entry[valueField]} ${type === 'wins' ? '🏆' : '🔥'}</div>
+                        </div>
+                    `;
+                }).join('');
+            } catch (error) {
+                showMessage('message', 'Ошибка загрузки', 'error');
+            }
+        }
+
+        loadLeaderboard('wins');
+    </script>
+</body>
+</html>

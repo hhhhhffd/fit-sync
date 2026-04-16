@@ -1,0 +1,42 @@
+# Environment
+.env
+
+# Database
+*.db
+*.db-journal
+
+# Go
+backend/bin/
+backend/vendor/
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Python
+telegram-bot/__pycache__/
+telegram-bot/*.pyc
+telegram-bot/*.pyo
+telegram-bot/*.pyd
+telegram-bot/.Python
+telegram-bot/venv/
+telegram-bot/.venv/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Build artifacts
+bin/
+dist/

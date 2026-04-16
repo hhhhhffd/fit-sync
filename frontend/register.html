@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Регистрация - Fitness App</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        .auth-card {
+            max-width: 480px;
+            margin: 40px auto;
+            background: var(--bg-card);
+            padding: 2.5rem;
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 0 60px rgba(0, 240, 255, 0.1);
+        }
+        .auth-card h1 {
+            text-align: center;
+            margin-bottom: 2rem;
+            background: linear-gradient(90deg, var(--cyan-start), var(--cyan-end));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 1.75rem;
+        }
+        .telegram-box {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: linear-gradient(135deg, rgba(0, 240, 255, 0.1) 0%, rgba(0, 255, 148, 0.1) 100%);
+            border: 1px solid rgba(0, 240, 255, 0.3);
+            border-radius: 12px;
+        }
+        .telegram-box h3 {
+            color: var(--text-primary);
+            margin: 0 0 0.75rem 0;
+        }
+        .telegram-box p {
+            color: var(--text-secondary);
+            margin: 0 0 1rem 0;
+            font-size: 0.9rem;
+        }
+        .telegram-btn {
+            display: inline-block;
+            background: linear-gradient(90deg, var(--cyan-start), var(--cyan-end));
+            color: var(--bg-dark);
+            padding: 0.75rem 2rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .telegram-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 240, 255, 0.4);
+            color: var(--bg-dark);
+        }
+        .divider {
+            text-align: center;
+            margin: 1.5rem 0;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+        .auth-footer {
+            text-align: center;
+            margin-top: 1.5rem;
+            color: var(--text-secondary);
+        }
+        .error-message {
+            background: linear-gradient(90deg, rgba(250, 17, 79, 0.2), rgba(255, 87, 152, 0.2));
+            border: 1px solid var(--red-start);
+            color: var(--red-end);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+        .btn-primary {
+            width: 100%;
+            margin-top: 0.5rem;
+        }
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+        @media (max-width: 480px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <script src="js/app.js"></script>
+    <div class="container">
+        <div class="auth-card">
+            <h1>✨ Регистрация</h1>
+
+            <div class="telegram-box">
+                <h3>🚀 Зарегистрироваться через Telegram</h3>
+                <p>Самый быстрый способ начать!</p>
+                <a href="https://t.me/eduOrda_bot?start=webapp" class="telegram-btn">
+                    Открыть в Telegram
+                </a>
+            </div>
+
+            <div class="divider">или зарегистрироваться вручную</div>
+
+            <form id="register-form">
+                <div class="form-group">
+                    <label for="email">Email *</label>
+                    <input type="email" id="email" required placeholder="your@email.com">
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="login">Логин *</label>
+                        <input type="text" id="login" required placeholder="username" minlength="3">
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Пароль *</label>
+                        <input type="password" id="password" required placeholder="мин. 6 символов" minlength="6">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="name">Имя *</label>
+                    <input type="text" id="name" required placeholder="Иван Иванов">
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="age">Возраст</label>
+                        <input type="number" id="age" placeholder="25" min="10" max="120">
+                    </div>
+                    <div class="form-group">
+                        <label for="height">Рост (см)</label>
+                        <input type="number" id="height" placeholder="175" min="100" max="250" step="0.1">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="weight">Вес (кг)</label>
+                    <input type="number" id="weight" placeholder="70" min="30" max="300" step="0.1">
+                </div>
+
+                <div id="error-message" class="error-message" style="display: none;"></div>
+
+                <button type="submit" class="btn-primary">Зарегистрироваться</button>
+            </form>
+
+            <div class="auth-footer">
+                Уже есть аккаунт? <a href="login.html">Войти</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const form = document.getElementById('register-form');
+        const errorDiv = document.getElementById('error-message');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const data = {
+                email: document.getElementById('email').value,
+                login: document.getElementById('login').value,
+                password: document.getElementById('password').value,
+                name: document.getElementById('name').value,
+                age: parseInt(document.getElementById('age').value) || 0,
+                height: parseFloat(document.getElementById('height').value) || 0,
+                weight: parseFloat(document.getElementById('weight').value) || 0
+            };
+
+            try {
+                const response = await fetch(`${API_URL}/register`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+
+                if (response.ok) {
+                    const result = await response.json();
+                    localStorage.setItem('token', result.token);
+                    localStorage.setItem('user', JSON.stringify(result.user));
+                    window.location.href = 'dashboard.html';
+                } else {
+                    const error = await response.text();
+                    errorDiv.textContent = error || 'Ошибка регистрации';
+                    errorDiv.style.display = 'block';
+                }
+            } catch (err) {
+                errorDiv.textContent = 'Ошибка соединения с сервером';
+                errorDiv.style.display = 'block';
+            }
+        });
+    </script>
+</body>
+</html>

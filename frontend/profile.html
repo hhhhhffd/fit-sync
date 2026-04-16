@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Профиль - Fitness App</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        .page-title h2 {
+            background: linear-gradient(90deg, var(--purple-start), var(--purple-end));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 1.75rem;
+            margin-bottom: 2rem;
+        }
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--purple-start), var(--purple-end));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: white;
+            flex-shrink: 0;
+        }
+        .avatar img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        .profile-info h3 {
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+        }
+        .profile-info p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+        @media (max-width: 480px) {
+            .form-row { grid-template-columns: 1fr; }
+            .profile-header { flex-direction: column; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+    <script src="js/app.js"></script>
+    <header>
+        <div class="container">
+            <h1>🔥 Fitness App</h1>
+            <nav>
+                <a href="dashboard.html">Дашборд</a>
+                <a href="profile.html">Профиль</a>
+                <a href="challenges.html">Челленджи</a>
+                <a href="leaderboard.html">Лидерборд</a>
+                <a href="#" onclick="logout()">Выход</a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="page-title">
+            <h2>👤 Мой профиль</h2>
+        </div>
+
+        <div id="message"></div>
+
+        <div class="card">
+            <div class="profile-header">
+                <div class="avatar" id="avatarContainer">👤</div>
+                <div class="profile-info">
+                    <h3 id="displayName">Загрузка...</h3>
+                    <p id="displayLogin">@...</p>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Имя</label>
+                <input type="text" id="name" placeholder="Как тебя зовут?">
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Рост (см)</label>
+                    <input type="number" id="height" min="0" step="0.1" placeholder="175">
+                </div>
+                <div class="form-group">
+                    <label>Вес (кг)</label>
+                    <input type="number" id="weight" min="0" step="0.1" placeholder="70">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>О себе</label>
+                <textarea id="description" rows="3" placeholder="Расскажи о своих целях..."></textarea>
+            </div>
+
+            <button onclick="updateProfile()">💾 Сохранить</button>
+        </div>
+
+        <div class="card">
+            <h3 style="color: var(--text-primary); margin-bottom: 1rem;">🏅 Мои достижения</h3>
+            <div id="achievementsList" class="achievements-grid"></div>
+        </div>
+    </div>
+
+    <script>
+        checkAuth();
+
+        async function loadProfile() {
+            try {
+                const user = await apiCall('/profile');
+                document.getElementById('name').value = user.name || '';
+                document.getElementById('height').value = user.height || '';
+                document.getElementById('weight').value = user.weight || '';
+                document.getElementById('description').value = user.description || '';
+                
+                document.getElementById('displayName').textContent = user.name || 'Атлет';
+                document.getElementById('displayLogin').textContent = '@' + (user.login || 'anonymous');
+                
+                if (user.photo_url) {
+                    document.getElementById('avatarContainer').innerHTML = `<img src="${user.photo_url}" alt="Avatar">`;
+                } else {
+                    const initial = (user.name || 'U').charAt(0).toUpperCase();
+                    document.getElementById('avatarContainer').textContent = initial;
+                }
+            } catch (error) {
+                showMessage('message', 'Ошибка загрузки профиля', 'error');
+            }
+        }
+
+        async function updateProfile() {
+            const profile = {
+                name: document.getElementById('name').value,
+                height: parseFloat(document.getElementById('height').value) || 0,
+                weight: parseFloat(document.getElementById('weight').value) || 0,
+                description: document.getElementById('description').value
+            };
+
+            try {
+                await apiCall('/profile', {
+                    method: 'PUT',
+                    body: JSON.stringify(profile)
+                });
+
+                showMessage('message', 'Профиль обновлён! ✨', 'success');
+                loadProfile();
+            } catch (error) {
+                showMessage('message', 'Ошибка обновления', 'error');
+            }
+        }
+
+        async function loadAchievements() {
+            try {
+                const achievements = await apiCall('/achievements');
+                const list = document.getElementById('achievementsList');
+
+                if (achievements.length === 0) {
+                    list.innerHTML = '<p style="color: var(--text-muted);">Пока нет достижений. Побеждай в челленджах! 🏆</p>';
+                    return;
+                }
+
+                list.innerHTML = achievements.map(a => `
+                    <div class="achievement unlocked">
+                        <div class="icon">${a.achievement.icon}</div>
+                        <h4>${a.achievement.name}</h4>
+                        <div class="description">${a.achievement.description}</div>
+                        <div class="meta" style="margin-top: 0.5rem; font-size: 0.75rem;">${formatDate(a.unlocked_at)}</div>
+                    </div>
+                `).join('');
+            } catch (error) {
+                console.error('Failed to load achievements');
+            }
+        }
+
+        loadProfile();
+        loadAchievements();
+    </script>
+</body>
+</html>

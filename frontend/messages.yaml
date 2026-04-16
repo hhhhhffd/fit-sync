@@ -1,0 +1,141 @@
+# Frontend Messages Config
+# Placeholders: {name}, {login}, {wins}, {streak}, {best_streak}, {value}, {goal}, {progress}, {date}
+
+auth:
+  login_title: "🔥 Вход"
+  register_title: "✨ Регистрация"
+  telegram_login: "🚀 Войти через Telegram"
+  telegram_register: "🚀 Зарегистрироваться через Telegram"
+  telegram_subtitle: "Быстро и безопасно"
+  or_divider: "или войти через логин/пароль"
+  no_account: "Нет аккаунта?"
+  has_account: "Уже есть аккаунт?"
+  register_link: "Зарегистрироваться"
+  login_link: "Войти"
+  
+  errors:
+    invalid_credentials: "Неверный логин или пароль"
+    email_exists: "Email уже занят"
+    login_exists: "Логин уже занят"
+    network: "Ошибка соединения с сервером"
+
+dashboard:
+  title: "📊 Панель пользователя"
+  stats:
+    wins: "🏆 Победы"
+    streak: "🔥 Текущая серия"
+    best_streak: "⚡ Лучшая серия"
+  
+  activities:
+    title: "📈 Последние активности"
+    empty: "Пока нет активностей. Добавь первую! 💪"
+    added: "Активность добавлена! 🎉"
+    tabs:
+      week: "Неделя"
+      month: "Месяц"
+      year: "Год"
+      all: "Всё время"
+  
+  achievements:
+    title: "🏅 Достижения"
+    empty: "Пока нет достижений. Побеждай в челленджах! 🏆"
+
+challenges:
+  title: "⚔️ Челленджи"
+  create_button: "➕ Создать челлендж"
+  my_challenges: "Мои челленджи"
+  empty: "Пока нет челленджей. Создай первый! 💪"
+  
+  form:
+    title: "Создать челлендж"
+    name_label: "Название"
+    name_placeholder: "Например: Пробежать 50 км за неделю"
+    description_label: "Описание"
+    description_placeholder: "Опишите правила и условия"
+    type_label: "Тип челленджа"
+    type_accumulative: "📊 Накопительный (сумма значений)"
+    type_consistency: "📅 Последовательный (дни подряд)"
+    goal_label: "Цель"
+    goal_placeholder: "Например: 50 км или 7 дней"
+    start_date: "Дата начала"
+    end_date: "Дата окончания"
+  
+  status:
+    active: "🔥 Active"
+    pending: "⏳ Pending"
+    completed: "✅ Done"
+  
+  details:
+    participants: "👥 Прогресс участников"
+    no_progress: "Пока нет прогресса"
+    add_progress: "➕ Добавить прогресс"
+    invite_code: "Код приглашения:"
+  
+  messages:
+    created: "Челлендж создан! 🎉"
+    joined: "Ты присоединился! 💪"
+    progress_added: "Прогресс добавлен! 💪"
+    name_required: "Название обязательно"
+    invalid_value: "Введите корректное значение"
+
+leaderboard:
+  title: "🏆 Лидерборд"
+  tabs:
+    wins: "🏆 Топ победителей"
+    streak: "🔥 Лучшие серии"
+  empty: "Пока нет участников. Будь первым! 💪"
+
+profile:
+  title: "👤 Мой профиль"
+  form:
+    name: "Имя"
+    name_placeholder: "Как тебя зовут?"
+    height: "Рост (см)"
+    weight: "Вес (кг)"
+    about: "О себе"
+    about_placeholder: "Расскажи о своих целях..."
+  save_button: "💾 Сохранить"
+  updated: "Профиль обновлён! ✨"
+  achievements_title: "🏅 Мои достижения"
+
+navigation:
+  dashboard: "Панель пользователя"
+  profile: "Профиль"
+  challenges: "Челленджи"
+  leaderboard: "Лидерборд"
+  logout: "Выход"
+
+common:
+  loading: "Загрузка..."
+  save: "Сохранить"
+  cancel: "Отмена"
+  back: "← Назад"
+  error: "Ошибка"
+  success: "Успешно"
+  confirm: "Подтвердить"
+
+landing:
+  title: "🔥 Fitness App"
+  subtitle: "Челленджи с друзьями. Достижения. Лидерборды. Стань лучшей версией себя."
+  login_button: "Войти"
+  register_button: "Регистрация"
+  features:
+    challenges:
+      title: "Челленджи"
+      description: "Соревнуйся с друзьями"
+    achievements:
+      title: "Достижения"
+      description: "Разблокируй награды"
+    leaderboard:
+      title: "Лидерборд"
+      description: "Топ победителей"
+    telegram:
+      title: "Telegram Bot"
+      description: "Управляй из мессенджера"
+
+activity_types:
+  running: "🏃 Бег"
+  cycling: "🚴 Велосипед"
+  swimming: "🏊 Плавание"
+  gym: "💪 Зал"
+  other: "📝 Другое"

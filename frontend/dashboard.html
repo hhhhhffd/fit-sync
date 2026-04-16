@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Fitness App</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .page-title {
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        .page-title h2 {
+            background: linear-gradient(90deg, var(--cyan-start), var(--cyan-end));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 1.75rem;
+        }
+        .activity-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            margin-right: 0.75rem;
+            flex-shrink: 0;
+        }
+        .activity-icon.running { background: linear-gradient(135deg, var(--cyan-start), var(--cyan-end)); }
+        .activity-icon.cycling { background: linear-gradient(135deg, var(--purple-start), var(--purple-end)); }
+        .activity-icon.swimming { background: linear-gradient(135deg, var(--red-start), var(--red-end)); }
+        .activity-icon.gym { background: linear-gradient(135deg, var(--amber-start), var(--amber-end)); }
+        .activity-icon.other { background: var(--text-muted); }
+        .activity-item {
+            display: flex;
+            align-items: center;
+            border-left: none;
+            padding-left: 1rem;
+        }
+        .activity-content { flex: 1; }
+        .activity-stats {
+            display: flex;
+            gap: 1rem;
+            margin-top: 0.25rem;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+        .activity-stats span {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+        .btn-add {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .form-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>🔥 Fitness App</h1>
+            <nav>
+                <a href="dashboard.html">Дашборд</a>
+                <a href="profile.html">Профиль</a>
+                <a href="challenges.html">Челленджи</a>
+                <a href="leaderboard.html">Лидерборд</a>
+                <a href="#" onclick="logout()">Выход</a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="page-title">
+            <h2>📊 Дашборд</h2>
+        </div>
+
+        <div id="message"></div>
+
+        <div class="stats">
+            <div class="stat-card">
+                <h3>🏆 Победы</h3>
+                <div class="value" id="wins">-</div>
+            </div>
+            <div class="stat-card">
+                <h3>🔥 Текущая серия</h3>
+                <div class="value" id="currentStreak">-</div>
+            </div>
+            <div class="stat-card">
+                <h3>⚡ Лучшая серия</h3>
+                <div class="value" id="bestStreak">-</div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>📈 Последние активности</h3>
+
+            <div class="tabs">
+                <button class="tab active" onclick="loadActivities('week')">Неделя</button>
+                <button class="tab" onclick="loadActivities('month')">Месяц</button>
+                <button class="tab" onclick="loadActivities('year')">Год</button>
+                <button class="tab" onclick="loadActivities('all')">Всё время</button>
+            </div>
+
+            <div id="activitiesList"></div>
+
+            <button class="mt-1 btn-add" onclick="showAddActivityForm()">➕ Добавить активность</button>
+
+            <div id="addActivityForm" class="hidden mt-1">
+                <div class="form-group">
+                    <label>Тип активности</label>
+                    <select id="activityType">
+                        <option value="running">🏃 Бег</option>
+                        <option value="cycling">🚴 Велосипед</option>
+                        <option value="swimming">🏊 Плавание</option>
+                        <option value="gym">💪 Зал</option>
+                        <option value="other">📝 Другое</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Длительность (минуты)</label>
+                    <input type="number" id="duration" min="1" placeholder="30">
+                </div>
+                <div class="form-group">
+                    <label>Дистанция (км)</label>
+                    <input type="number" id="distance" min="0" step="0.1" placeholder="5.0">
+                </div>
+                <div class="form-group">
+                    <label>Калории</label>
+                    <input type="number" id="calories" min="0" placeholder="300">
+                </div>
+                <div class="form-group">
+                    <label>Дата</label>
+                    <input type="date" id="activityDate">
+                </div>
+                <div class="form-group">
+                    <label>Заметки</label>
+                    <textarea id="notes" rows="3" placeholder="Как прошла тренировка?"></textarea>
+                </div>
+                <div class="form-actions">
+                    <button onclick="addActivity()">Сохранить</button>
+                    <button class="secondary" onclick="hideAddActivityForm()">Отмена</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>🏅 Достижения</h3>
+            <div id="achievementsList" class="achievements-grid"></div>
+        </div>
+    </div>
+
+    <script src="js/app.js"></script>
+    <script>
+        checkAuth();
+
+        let currentPeriod = 'week';
+
+        const activityIcons = {
+            running: '🏃',
+            cycling: '🚴',
+            swimming: '🏊',
+            gym: '💪',
+            other: '📝'
+        };
+
+        async function loadProfile() {
+            try {
+                const user = await apiCall('/profile');
+                document.getElementById('wins').textContent = user.total_wins;
+                document.getElementById('currentStreak').textContent = user.current_streak;
+                document.getElementById('bestStreak').textContent = user.best_streak;
+            } catch (error) {
+                showMessage('message', 'Failed to load profile', 'error');
+            }
+        }
+
+        async function loadActivities(period = 'week') {
+            currentPeriod = period;
+
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            event?.target?.classList?.add('active');
+
+            try {
+                const activities = await apiCall(`/activities?period=${period}`);
+                const list = document.getElementById('activitiesList');
+
+                if (activities.length === 0) {
+                    list.innerHTML = '<p style="color: var(--text-muted); padding: 1rem 0;">Пока нет активностей. Добавь первую! 💪</p>';
+                    return;
+                }
+
+                list.innerHTML = activities.map(a => `
+                    <div class="activity-item">
+                        <div class="activity-icon ${a.activity_type}">${activityIcons[a.activity_type] || '📝'}</div>
+                        <div class="activity-content">
+                            <h4>${a.activity_type.charAt(0).toUpperCase() + a.activity_type.slice(1)}</h4>
+                            <div class="activity-stats">
+                                <span>⏱ ${a.duration} мин</span>
+                                <span>📏 ${a.distance} км</span>
+                                <span>🔥 ${a.calories} ккал</span>
+                            </div>
+                            ${a.notes ? `<p style="margin-top: 0.5rem; font-size: 0.9rem; color: var(--text-secondary);">${a.notes}</p>` : ''}
+                        </div>
+                        <div class="meta">${formatDate(a.activity_date)}</div>
+                    </div>
+                `).join('');
+            } catch (error) {
+                showMessage('message', 'Failed to load activities', 'error');
+            }
+        }
+
+        async function addActivity() {
+            const activity = {
+                activity_type: document.getElementById('activityType').value,
+                duration: parseInt(document.getElementById('duration').value),
+                distance: parseFloat(document.getElementById('distance').value) || 0,
+                calories: parseInt(document.getElementById('calories').value) || 0,
+                notes: document.getElementById('notes').value,
+                activity_date: document.getElementById('activityDate').value + 'T00:00:00Z'
+            };
+
+            try {
+                await apiCall('/activities', {
+                    method: 'POST',
+                    body: JSON.stringify(activity)
+                });
+
+                hideAddActivityForm();
+                loadActivities(currentPeriod);
+                showMessage('message', 'Активность добавлена! 🎉', 'success');
+            } catch (error) {
+                showMessage('message', 'Ошибка при добавлении', 'error');
+            }
+        }
+
+        function showAddActivityForm() {
+            document.getElementById('addActivityForm').classList.remove('hidden');
+            document.getElementById('activityDate').valueAsDate = new Date();
+        }
+
+        function hideAddActivityForm() {
+            document.getElementById('addActivityForm').classList.add('hidden');
+        }
+
+        async function loadAchievements() {
+            try {
+                const achievements = await apiCall('/achievements');
+                const list = document.getElementById('achievementsList');
+
+                if (achievements.length === 0) {
+                    list.innerHTML = '<p style="color: var(--text-muted);">Пока нет достижений. Побеждай в челленджах! 🏆</p>';
+                    return;
+                }
+
+                list.innerHTML = achievements.slice(0, 6).map(a => `
+                    <div class="achievement unlocked">
+                        <div class="icon">${a.achievement.icon}</div>
+                        <h4>${a.achievement.name}</h4>
+                        <div class="description">${a.achievement.description}</div>
+                    </div>
+                `).join('');
+            } catch (error) {
+                console.error('Failed to load achievements');
+            }
+        }
+
+        loadProfile();
+        loadActivities('week');
+        loadAchievements();
+    </script>
+</body>
+</html>

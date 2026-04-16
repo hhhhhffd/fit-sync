@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fitness App</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        .landing {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 2rem;
+        }
+        .landing h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(90deg, var(--cyan-start), var(--cyan-end));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .landing p {
+            color: var(--text-secondary);
+            font-size: 1.25rem;
+            margin-bottom: 2rem;
+            max-width: 500px;
+        }
+        .landing-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .landing-buttons a {
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        .btn-primary-landing {
+            background: linear-gradient(90deg, var(--cyan-start), var(--cyan-end));
+            color: var(--bg-dark);
+        }
+        .btn-primary-landing:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 240, 255, 0.4);
+            color: var(--bg-dark);
+        }
+        .btn-secondary-landing {
+            background: transparent;
+            border: 1px solid var(--red-start);
+            color: var(--red-start);
+        }
+        .btn-secondary-landing:hover {
+            background: rgba(250, 17, 79, 0.1);
+            color: var(--red-end);
+        }
+        .features {
+            display: flex;
+            gap: 2rem;
+            margin-top: 4rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .feature {
+            text-align: center;
+            max-width: 200px;
+        }
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+        .feature h3 {
+            color: var(--text-primary);
+            font-size: 1rem;
+            margin-bottom: 0.25rem;
+        }
+        .feature p {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+    </style>
+</head>
+<body>
+    <script src="js/app.js"></script>
+    <div class="landing">
+        <h1>🔥 Fitness App</h1>
+        <p>Челленджи с друзьями. Достижения. Лидерборды. Стань лучшей версией себя.</p>
+        
+        <div class="landing-buttons">
+            <a href="login.html" class="btn-primary-landing">Войти</a>
+            <a href="register.html" class="btn-secondary-landing">Регистрация</a>
+        </div>
+        
+        <div class="features">
+            <div class="feature">
+                <div class="feature-icon">⚔️</div>
+                <h3>Челленджи</h3>
+                <p>Соревнуйся с друзьями</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">🏆</div>
+                <h3>Достижения</h3>
+                <p>Разблокируй награды</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">📊</div>
+                <h3>Лидерборд</h3>
+                <p>Топ победителей</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">🤖</div>
+                <h3>Telegram Bot</h3>
+                <p>Управляй из мессенджера</p>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        if (getToken()) {
+            window.location.href = 'dashboard.html';
+        }
+    </script>
+</body>
+</html>

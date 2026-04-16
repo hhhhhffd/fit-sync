@@ -1,0 +1,974 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    /* Красный градиент (Activity / Проблемы) */
+    --red-start: #FA114F;
+    --red-end: #FF5798;
+    
+    /* Циан-Зеленый градиент (Unity / Мотивация / AI) */
+    --cyan-start: #00F0FF;
+    --cyan-end: #00FF94;
+    
+    /* Фиолетовый градиент (Частота тренировок) */
+    --purple-start: #A855F7;
+    --purple-end: #D8B4FE;
+    
+    /* Янтарный градиент (Возраст) */
+    --amber-start: #F59E0B;
+    --amber-end: #FDE68A;
+    
+    /* Фоны */
+    --bg-dark: #0A0A0F;
+    --bg-card: #12121A;
+    --bg-card-hover: #1A1A25;
+    --border-color: #2A2A3A;
+    
+    /* Текст */
+    --text-primary: #FFFFFF;
+    --text-secondary: #9CA3AF;
+    --text-muted: #6B7280;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    background: var(--bg-dark);
+    color: var(--text-primary);
+    line-height: 1.6;
+    min-height: 100vh;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Header */
+header {
+    background: linear-gradient(180deg, rgba(18, 18, 26, 0.95) 0%, rgba(10, 10, 15, 0.9) 100%);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border-color);
+    padding: 1rem 0;
+    margin-bottom: 2rem;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+header .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+header h1 {
+    font-size: 1.5rem;
+    background: linear-gradient(90deg, var(--cyan-start), var(--cyan-end));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-weight: 700;
+}
+
+nav a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    margin-left: 1.5rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+nav a:hover {
+    color: var(--cyan-start);
+    text-shadow: 0 0 20px rgba(0, 240, 255, 0.5);
+}
+
+/* Auth */
+.auth-container {
+    max-width: 420px;
+    margin: 80px auto;
+    background: var(--bg-card);
+    padding: 2.5rem;
+    border-radius: 16px;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 0 60px rgba(0, 240, 255, 0.1);
+}
+
+.auth-container h2 {
+    margin-bottom: 1.5rem;
+    text-align: center;
+    background: linear-gradient(90deg, var(--red-start), var(--red-end));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-size: 1.75rem;
+}
+
+/* Forms */
+.form-group {
+    margin-bottom: 1.25rem;
+}
+
+label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+input, textarea, select {
+    width: 100%;
+    padding: 0.875rem 1rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 1rem;
+    color: var(--text-primary);
+    transition: all 0.3s ease;
+}
+
+input::placeholder, textarea::placeholder {
+    color: var(--text-muted);
+}
+
+input:focus, textarea:focus, select:focus {
+    outline: none;
+    border-color: var(--cyan-start);
+    box-shadow: 0 0 20px rgba(0, 240, 255, 0.2);
+    background: rgba(0, 240, 255, 0.05);
+}
+
+button {
+    background: linear-gradient(90deg, var(--cyan-start), var(--cyan-end));
+    color: var(--bg-dark);
+    border: none;
+    padding: 0.875rem 1.75rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(0, 240, 255, 0.4);
+}
+
+button:disabled {
+    background: var(--text-muted);
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+button.secondary {
+    background: transparent;
+    border: 1px solid var(--cyan-start);
+    color: var(--cyan-start);
+}
+
+button.secondary:hover {
+    background: rgba(0, 240, 255, 0.1);
+}
+
+button.danger {
+    background: linear-gradient(90deg, var(--red-start), var(--red-end));
+}
+
+button.danger:hover {
+    box-shadow: 0 10px 30px rgba(250, 17, 79, 0.4);
+}
+
+/* Cards */
+.card {
+    background: var(--bg-card);
+    padding: 1.5rem;
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    margin-bottom: 1rem;
+    transition: all 0.3s ease;
+}
+
+.card:hover {
+    background: var(--bg-card-hover);
+    border-color: rgba(0, 240, 255, 0.3);
+    box-shadow: 0 0 30px rgba(0, 240, 255, 0.1);
+}
+
+.card h3 {
+    margin-bottom: 1rem;
+    color: var(--text-primary);
+}
+
+/* Grid */
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+
+/* Stats */
+.stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.stat-card {
+    background: var(--bg-card);
+    padding: 1.75rem;
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--cyan-start), var(--cyan-end));
+}
+
+.stat-card:nth-child(2)::before {
+    background: linear-gradient(90deg, var(--red-start), var(--red-end));
+}
+
+.stat-card:nth-child(3)::before {
+    background: linear-gradient(90deg, var(--purple-start), var(--purple-end));
+}
+
+.stat-card:nth-child(4)::before {
+    background: linear-gradient(90deg, var(--amber-start), var(--amber-end));
+}
+
+.stat-card h3 {
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    margin-bottom: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.stat-card .value {
+    font-size: 2.5rem;
+    font-weight: 700;
+    background: linear-gradient(90deg, var(--cyan-start), var(--cyan-end));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.stat-card:nth-child(2) .value {
+    background: linear-gradient(90deg, var(--red-start), var(--red-end));
+    -webkit-background-clip: text;
+    background-clip: text;
+}
+
+.stat-card:nth-child(3) .value {
+    background: linear-gradient(90deg, var(--purple-start), var(--purple-end));
+    -webkit-background-clip: text;
+    background-clip: text;
+}
+
+/* Tabs */
+.tabs {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+    background: var(--bg-card);
+    padding: 0.5rem;
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+}
+
+.tab {
+    padding: 0.75rem 1.5rem;
+    cursor: pointer;
+    border: none;
+    background: transparent;
+    color: var(--text-secondary);
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    font-weight: 500;
+}
+
+.tab:hover {
+    color: var(--text-primary);
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.tab.active {
+    background: linear-gradient(90deg, var(--cyan-start), var(--cyan-end));
+    color: var(--bg-dark);
+}
+
+/* Activities */
+.activity-item {
+    background: var(--bg-card);
+    border-radius: 12px;
+    padding: 1.25rem;
+    padding-left: 1.5rem;
+    margin-bottom: 1rem;
+    border: 1px solid var(--border-color);
+    border-left: 4px solid transparent;
+    border-image: linear-gradient(180deg, var(--cyan-start), var(--cyan-end)) 1;
+    transition: all 0.3s ease;
+}
+
+.activity-item:hover {
+    background: var(--bg-card-hover);
+}
+
+.activity-item h4 {
+    margin-bottom: 0.5rem;
+    color: var(--text-primary);
+}
+
+.activity-item .meta {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+/* Challenges */
+.challenge-card {
+    position: relative;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 1.5rem;
+    transition: all 0.3s ease;
+}
+
+.challenge-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+    border-color: rgba(0, 240, 255, 0.3);
+}
+
+.challenge-status {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    padding: 0.35rem 0.875rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.challenge-status.pending {
+    background: linear-gradient(90deg, var(--amber-start), var(--amber-end));
+    color: var(--bg-dark);
+}
+
+.challenge-status.active {
+    background: linear-gradient(90deg, var(--cyan-start), var(--cyan-end));
+    color: var(--bg-dark);
+}
+
+.challenge-status.completed {
+    background: var(--text-muted);
+    color: var(--text-primary);
+}
+
+.participants {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+.participant {
+    background: rgba(0, 240, 255, 0.1);
+    border: 1px solid rgba(0, 240, 255, 0.3);
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    color: var(--cyan-start);
+}
+
+/* Progress Bar */
+.progress-bar {
+    width: 100%;
+    height: 8px;
+    background: var(--border-color);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-top: 1rem;
+}
+
+.progress-bar .fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--cyan-start), var(--cyan-end));
+    border-radius: 4px;
+    transition: width 0.5s ease;
+}
+
+.progress-bar.red .fill {
+    background: linear-gradient(90deg, var(--red-start), var(--red-end));
+}
+
+.progress-bar.purple .fill {
+    background: linear-gradient(90deg, var(--purple-start), var(--purple-end));
+}
+
+.progress-bar.amber .fill {
+    background: linear-gradient(90deg, var(--amber-start), var(--amber-end));
+}
+
+/* Leaderboard */
+.leaderboard-item {
+    display: flex;
+    align-items: center;
+    padding: 1.25rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    margin-bottom: 0.75rem;
+    transition: all 0.3s ease;
+}
+
+.leaderboard-item:hover {
+    background: var(--bg-card-hover);
+    border-color: rgba(0, 240, 255, 0.3);
+}
+
+.rank {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-right: 1.25rem;
+    min-width: 50px;
+    text-align: center;
+}
+
+.rank.gold {
+    background: linear-gradient(90deg, var(--amber-start), var(--amber-end));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-shadow: 0 0 20px rgba(245, 158, 11, 0.5);
+}
+
+.rank.silver {
+    color: #C0C0C0;
+    text-shadow: 0 0 20px rgba(192, 192, 192, 0.5);
+}
+
+.rank.bronze {
+    color: #CD7F32;
+    text-shadow: 0 0 20px rgba(205, 127, 50, 0.5);
+}
+
+.user-info {
+    flex: 1;
+}
+
+.user-info h4 {
+    margin-bottom: 0.25rem;
+    color: var(--text-primary);
+}
+
+.user-info .meta {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+.score {
+    font-size: 1.5rem;
+    font-weight: 700;
+    background: linear-gradient(90deg, var(--cyan-start), var(--cyan-end));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Achievements */
+.achievements-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 1.25rem;
+}
+
+.achievement {
+    background: var(--bg-card);
+    padding: 1.5rem 1rem;
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    text-align: center;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.achievement:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+}
+
+.achievement.unlocked {
+    border-color: rgba(0, 240, 255, 0.5);
+    box-shadow: 0 0 30px rgba(0, 240, 255, 0.2);
+}
+
+.achievement.locked {
+    opacity: 0.5;
+    filter: grayscale(1);
+}
+
+.achievement .icon {
+    font-size: 3rem;
+    margin-bottom: 0.75rem;
+    display: block;
+}
+
+.achievement h4 {
+    font-size: 0.9rem;
+    margin-bottom: 0.25rem;
+    color: var(--text-primary);
+}
+
+.achievement .description {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+}
+
+/* Ring Progress (like in the reference images) */
+.ring-progress {
+    position: relative;
+    width: 120px;
+    height: 120px;
+    margin: 0 auto 1rem;
+}
+
+.ring-progress svg {
+    transform: rotate(-90deg);
+}
+
+.ring-progress .bg {
+    fill: none;
+    stroke: var(--border-color);
+    stroke-width: 8;
+}
+
+.ring-progress .progress {
+    fill: none;
+    stroke-width: 8;
+    stroke-linecap: round;
+    stroke-dasharray: 339.292;
+    stroke-dashoffset: calc(339.292 * (1 - var(--progress, 0)));
+    transition: stroke-dashoffset 0.5s ease;
+}
+
+.ring-progress.cyan .progress {
+    stroke: url(#gradient-cyan);
+}
+
+.ring-progress.red .progress {
+    stroke: url(#gradient-red);
+}
+
+.ring-progress .value {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+/* Utility */
+.error {
+    background: linear-gradient(90deg, rgba(250, 17, 79, 0.2), rgba(255, 87, 152, 0.2));
+    border: 1px solid var(--red-start);
+    color: var(--red-end);
+    padding: 1rem 1.25rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+}
+
+.success {
+    background: linear-gradient(90deg, rgba(0, 240, 255, 0.1), rgba(0, 255, 148, 0.1));
+    border: 1px solid var(--cyan-start);
+    color: var(--cyan-end);
+    padding: 1rem 1.25rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+}
+
+.hidden {
+    display: none;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.mt-1 { margin-top: 1rem; }
+.mb-1 { margin-bottom: 1rem; }
+.mb-2 { margin-bottom: 2rem; }
+
+/* Links */
+a {
+    color: var(--cyan-start);
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+a:hover {
+    color: var(--cyan-end);
+    text-shadow: 0 0 10px rgba(0, 240, 255, 0.5);
+}
+
+/* Glow effects */
+.glow-cyan {
+    box-shadow: 0 0 30px rgba(0, 240, 255, 0.3);
+}
+
+.glow-red {
+    box-shadow: 0 0 30px rgba(250, 17, 79, 0.3);
+}
+
+.glow-purple {
+    box-shadow: 0 0 30px rgba(168, 85, 247, 0.3);
+}
+
+.glow-amber {
+    box-shadow: 0 0 30px rgba(245, 158, 11, 0.3);
+}
+
+/* Gradient text */
+.gradient-text-cyan {
+    background: linear-gradient(90deg, var(--cyan-start), var(--cyan-end));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.gradient-text-red {
+    background: linear-gradient(90deg, var(--red-start), var(--red-end));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.gradient-text-purple {
+    background: linear-gradient(90deg, var(--purple-start), var(--purple-end));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.gradient-text-amber {
+    background: linear-gradient(90deg, var(--amber-start), var(--amber-end));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--bg-dark);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--text-muted);
+}
+
+/* Selection */
+::selection {
+    background: rgba(0, 240, 255, 0.3);
+    color: var(--text-primary);
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+    .container {
+        padding: 15px;
+    }
+    
+    header .container {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    nav {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 0.5rem;
+    }
+    
+    nav a {
+        margin-left: 0;
+        padding: 0.5rem 1rem;
+        background: var(--bg-card);
+        border-radius: 8px;
+    }
+    
+    .stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .stat-card .value {
+        font-size: 1.75rem;
+    }
+    
+    .tabs {
+        overflow-x: auto;
+    }
+    
+    .achievements-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* === CHALLENGES WEBAPP === */
+
+.challenges-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.challenges-header h2 {
+    margin: 0;
+}
+
+.challenges-actions {
+    display: flex;
+    gap: 0.75rem;
+}
+
+.btn-primary {
+    background: linear-gradient(90deg, var(--cyan-start), var(--cyan-end));
+    color: var(--bg-dark);
+    border: none;
+    padding: 0.75rem 1.25rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 240, 255, 0.4);
+}
+
+.btn-secondary {
+    background: transparent;
+    border: 1px solid var(--cyan-start);
+    color: var(--cyan-start);
+    padding: 0.75rem 1.25rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-secondary:hover {
+    background: rgba(0, 240, 255, 0.1);
+}
+
+.btn-back {
+    background: transparent;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    font-size: 1rem;
+    padding: 0.5rem 0;
+    margin-bottom: 1rem;
+    display: inline-block;
+    transition: color 0.3s;
+}
+
+.btn-back:hover {
+    color: var(--cyan-start);
+    transform: none;
+    box-shadow: none;
+}
+
+.challenges-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1rem;
+}
+
+.challenge-card {
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.challenge-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--cyan-start);
+}
+
+.challenge-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.75rem;
+}
+
+.challenge-status {
+    font-size: 1.25rem;
+}
+
+.challenge-type {
+    font-size: 1.25rem;
+    opacity: 0.7;
+}
+
+.challenge-meta {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 3rem;
+    color: var(--text-muted);
+}
+
+/* Challenge Detail */
+.challenge-detail {
+    max-width: 600px;
+}
+
+.challenge-detail-header {
+    margin-bottom: 1.5rem;
+}
+
+.challenge-info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+    margin-top: 1rem;
+    color: var(--text-secondary);
+}
+
+.invite-code {
+    margin-top: 1rem;
+    padding: 0.75rem;
+    background: rgba(0, 240, 255, 0.1);
+    border-radius: 8px;
+    border: 1px dashed var(--cyan-start);
+}
+
+.invite-code code {
+    background: var(--bg-dark);
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    font-family: monospace;
+    color: var(--cyan-start);
+}
+
+/* Progress bars */
+.progress-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.progress-item {
+    display: grid;
+    grid-template-columns: 100px 1fr 80px;
+    align-items: center;
+    gap: 1rem;
+}
+
+.progress-name {
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.progress-bar-container {
+    height: 8px;
+    background: var(--bg-dark);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, var(--cyan-start), var(--cyan-end));
+    border-radius: 4px;
+    transition: width 0.5s ease;
+}
+
+.progress-value {
+    text-align: right;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+.challenge-actions {
+    margin-top: 1.5rem;
+}
+
+.challenge-actions h3 {
+    margin-bottom: 1rem;
+}
+
+/* Forms in webapp */
+textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+select {
+    cursor: pointer;
+}
+
+@media (max-width: 480px) {
+    .challenges-header {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .challenges-actions {
+        justify-content: center;
+    }
+    
+    .progress-item {
+        grid-template-columns: 1fr;
+        gap: 0.5rem;
+    }
+    
+    .challenge-info-grid {
+        grid-template-columns: 1fr;
+    }
+}

@@ -1,0 +1,267 @@
+# Telegram Bot Messages Config
+# Placeholders: {username}, {name}, {wins}, {streak}, {best_streak}, {value}, {challenge_title}, {invite_code}, {goal}, {progress}
+
+auth:
+  welcome_new: |
+    🎉 Добро пожаловать, {name}!
+    
+    Твой аккаунт создан автоматически.
+    Готов к челленджам? 💪
+    
+    Используй /menu для списка команд!
+  
+  welcome_back: |
+    👋 С возвращением, {name}!
+    
+    🏆 Побед: {wins}
+    🔥 Текущая серия: {streak}
+    ⚡ Лучшая серия: {best_streak}
+    
+    Используй /menu для списка команд!
+  
+  already_logged: "✅ Ты уже авторизован! Используй /menu для списка команд."
+  logged_out: "👋 Ты вышел из аккаунта. До встречи!"
+  auth_required: "⚠️ Сначала авторизуйся: /start"
+
+menu:
+  header: |
+    🏋️ Fitness App - Команды
+    
+    📱 Основные:
+    /start - Запустить бота
+    /menu, /help - Показать меню
+    /register - Обновить профиль
+    /webapp - Открыть веб-приложение
+    /logout - Выйти
+    
+    👤 Профиль:
+    /profile - Посмотреть профиль
+    /stats - Статистика
+    
+    🏃 Активности:
+    /activities [week|month|year|all] - Список активностей
+    /addactivity - Добавить активность
+    
+    🏆 Челленджи:
+    /challenges - Мои челленджи
+    /challenge <id> - Детали челленджа
+    /createchallenge - Создать челлендж
+    /join <код> - Присоединиться по коду
+    /progress <id> - Добавить прогресс
+    
+    🏅 Достижения:
+    /achievements - Мои достижения
+    /leaderboard [wins|streak] - Лидерборд
+  
+  webapp_button: "Нажми кнопку ниже чтобы открыть веб-приложение:"
+
+profile:
+  header: |
+    👤 Профиль: {name}
+    
+    📊 Статистика:
+    🏆 Побед: {wins}
+    🔥 Серия: {streak}
+    ⚡ Лучшая: {best_streak}
+  
+  full: |
+    👤 Твой профиль
+    
+    Имя: {name}
+    Рост: {height} см
+    Вес: {weight} кг
+    
+    🏆 Побед: {wins}
+    🔥 Текущая серия: {streak}
+    ⚡ Лучшая серия: {best_streak}
+  
+  stats: |
+    📊 Твоя статистика
+    
+    🏆 Побед: {wins}
+    🔥 Текущая серия: {streak}
+    ⚡ Лучшая серия: {best_streak}
+  
+  updated: "✅ Профиль обновлён!"
+  error: "❌ Ошибка обновления профиля"
+  fetch_error: "❌ Не удалось загрузить профиль"
+
+activities:
+  header: "🏃 Активности ({period}):"
+  empty: "📭 Нет активностей за период: {period}"
+  total: "Всего: {count} активностей"
+  fetch_error: "❌ Не удалось загрузить активности"
+  
+  add_help: |
+    Чтобы добавить активность, отправь:
+    /addactivity running 30 5.2 250
+    
+    Формат: /addactivity <тип> <минуты> <км> <калории>
+    Типы: running, cycling, swimming, gym, other
+
+challenges:
+  list_header: "🏆 Твои челленджи:"
+  list_empty: "📭 Пока нет челленджей. Создай: /createchallenge"
+  list_footer: |
+    Используй /challenge <id> для деталей
+    Создать новый: /createchallenge
+  
+  created: |
+    ✅ Челлендж создан!
+    
+    🏆 {challenge_title}
+    📨 Код приглашения: `{invite_code}`
+    🔗 Поделиться: /join {invite_code}
+    
+    Детали: /challenge {challenge_id}
+  
+  joined: "✅ Ты присоединился к челленджу!"
+  join_error: "❌ Не удалось присоединиться: {error}"
+  not_found: "❌ Челлендж не найден"
+  fetch_error: "❌ Не удалось загрузить челленджи"
+  
+  details: |
+    🏆 {challenge_title}
+    
+    📄 {description}
+    {type_emoji} Тип: {type_name}
+    🎯 Цель: {goal}
+    👥 {participants_text}
+    📊 Статус: {status}
+    📅 Период: {start_date} - {end_date}
+  
+  invite_info: |
+    📨 Код приглашения: {invite_code}
+    Присоединиться: /join {invite_code}
+  
+  add_progress_hint: "💪 Добавить прогресс: /progress {challenge_id}"
+  
+  # Creation wizard
+  create_start: |
+    🏆 Создаём новый челлендж!
+    
+    Выбери тип:
+    
+    📊 **Накопительный**: Суммируй значения
+       Пример: Пробежать 50км, Прочитать 5 книг
+    
+    📅 **Последовательный**: Отмечайся каждый день
+       Пример: Медитация 7 дней, Учёба 30 дней
+  
+  type_selected: "✅ Тип выбран: {type_name}"
+  ask_title: "📝 Отправь название челленджа:"
+  title_too_short: "Название слишком короткое. Минимум 3 символа:"
+  ask_description: |
+    ✅ Название: {title}
+    
+    📄 Отправь описание (или /skip чтобы пропустить):
+  
+  ask_goal_accumulative: "🎯 Какая цель? (число, например 50 для 50км)"
+  ask_goal_consistency: "🎯 Сколько дней длится челлендж? (например 7 или 30)"
+  invalid_goal: "Отправь положительное число:"
+  
+  ask_max_participants: |
+    👥 Максимум участников?
+    Отправь число или /skip для безлимита
+  
+  invalid_max_participants: "Отправь число больше 0 или /skip:"
+  
+  ask_duration: |
+    ⏱ Сколько дней длится челлендж?
+    (например 7 для недели, 30 для месяца)
+  
+  invalid_duration: "Отправь положительное число дней:"
+  
+  confirm_summary: |
+    📋 Итого:
+    
+    📝 Название: {title}
+    📄 Описание: {description}
+    📊 Тип: {type_name}
+    🎯 Цель: {goal}
+    👥 Макс. участников: {max_participants}
+    📅 Длительность: {duration} дней
+    🗓 Начало: {start_date}
+    🗓 Конец: {end_date}
+    
+    Всё верно?
+  
+  creation_cancelled: "❌ Создание челленджа отменено"
+  creation_error: "❌ Ошибка создания: {error}"
+
+progress:
+  added: "✅ Прогресс добавлен: +{value}!"
+  error: "❌ Ошибка добавления: {error}"
+  
+  select_challenge: "Выбери челлендж для добавления прогресса:"
+  no_active: "У тебя нет активных челленджей"
+  
+  ask_value_accumulative: |
+    📊 {challenge_title}
+    
+    Сколько прогресса добавить? (число):
+  
+  ask_value_consistency: |
+    📅 {challenge_title}
+    
+    Отправь любое сообщение чтобы отметиться!
+  
+  invalid_value: "Отправь положительное число:"
+  
+  goal_reached: |
+    🎉 ЦЕЛЬ ДОСТИГНУТА!
+    
+    Ты выполнил челлендж «{challenge_title}»! 🏆
+
+notifications:
+  rival_progress: |
+    🔥 {name} добавил +{value}!
+    
+    🏆 {challenge_title}
+    📊 Добавить прогресс: /progress {challenge_id}
+  
+  morning_reminder: |
+    ☀️ Доброе утро, {name}!
+    
+    Не забудь про свои цели:
+    {challenges_list}
+    
+    💪 Добавить прогресс: /progress
+  
+  challenge_ending_soon: |
+    ⏰ Челлендж «{challenge_title}» заканчивается через {hours} ч!
+    
+    📊 Твой прогресс: {progress} / {goal}
+
+achievements:
+  unlocked: |
+    🎊 НОВОЕ ДОСТИЖЕНИЕ!
+    
+    {icon} {name}
+    {description}
+  
+  list_header: "🏅 Твои достижения:"
+  list_empty: "📭 Пока нет достижений. Побеждай в челленджах!"
+  fetch_error: "❌ Не удалось загрузить достижения"
+
+leaderboard:
+  header: "{emoji} Лидерборд - {type}"
+  empty: "📭 Лидерборд пуст"
+  fetch_error: "❌ Не удалось загрузить лидерборд"
+
+errors:
+  generic: "❌ Что-то пошло не так. Попробуй ещё раз."
+  network: "❌ Ошибка соединения с сервером"
+  invalid_input: "❌ Неверный формат. Попробуй ещё раз."
+  usage: "Использование: {usage}"
+
+buttons:
+  open_webapp: "🌐 Открыть приложение"
+  show_menu: "📱 Показать меню"
+  add_progress: "➕ Добавить прогресс"
+  create_challenge: "🏆 Создать челлендж"
+  type_accumulative: "📊 Накопительный"
+  type_consistency: "📅 Последовательный"
+  confirm: "✅ Создать челлендж"
+  cancel: "❌ Отмена"
+  back: "← Назад"

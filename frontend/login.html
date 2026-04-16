@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Вход - Fitness App</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        .auth-card {
+            max-width: 420px;
+            margin: 60px auto;
+            background: var(--bg-card);
+            padding: 2.5rem;
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 0 60px rgba(0, 240, 255, 0.1);
+        }
+        .auth-card h1 {
+            text-align: center;
+            margin-bottom: 2rem;
+            background: linear-gradient(90deg, var(--cyan-start), var(--cyan-end));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 1.75rem;
+        }
+        .telegram-box {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: linear-gradient(135deg, rgba(250, 17, 79, 0.2) 0%, rgba(255, 87, 152, 0.2) 100%);
+            border: 1px solid rgba(250, 17, 79, 0.4);
+            border-radius: 12px;
+        }
+        .telegram-box h3 {
+            color: var(--text-primary);
+            margin: 0 0 0.75rem 0;
+        }
+        .telegram-box p {
+            color: var(--text-secondary);
+            margin: 0 0 1rem 0;
+            font-size: 0.9rem;
+        }
+        .telegram-btn {
+            display: inline-block;
+            background: linear-gradient(90deg, var(--red-start), var(--red-end));
+            color: white;
+            padding: 0.75rem 2rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .telegram-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(250, 17, 79, 0.4);
+            color: white;
+        }
+        .divider {
+            text-align: center;
+            margin: 1.5rem 0;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+        .auth-footer {
+            text-align: center;
+            margin-top: 1.5rem;
+            color: var(--text-secondary);
+        }
+        .error-message {
+            background: linear-gradient(90deg, rgba(250, 17, 79, 0.2), rgba(255, 87, 152, 0.2));
+            border: 1px solid var(--red-start);
+            color: var(--red-end);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+        .btn-primary {
+            width: 100%;
+            margin-top: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <script src="js/app.js"></script>
+    <div class="container">
+        <div class="auth-card">
+            <h1>🔥 Вход</h1>
+
+            <div class="telegram-box">
+                <h3>🚀 Войти через Telegram</h3>
+                <p>Быстро и безопасно</p>
+                <a href="https://t.me/eduOrda_bot?start=webapp" class="telegram-btn">
+                    Открыть в Telegram
+                </a>
+            </div>
+
+            <div class="divider">или войти через логин/пароль</div>
+
+            <form id="login-form">
+                <div class="form-group">
+                    <label for="login">Логин</label>
+                    <input type="text" id="login" required placeholder="username">
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Пароль</label>
+                    <input type="password" id="password" required placeholder="пароль">
+                </div>
+
+                <div id="error-message" class="error-message" style="display: none;"></div>
+
+                <button type="submit" class="btn-primary">Войти</button>
+            </form>
+
+            <div class="auth-footer">
+                Нет аккаунта? <a href="register.html">Зарегистрироваться</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const form = document.getElementById('login-form');
+        const errorDiv = document.getElementById('error-message');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const data = {
+                login: document.getElementById('login').value,
+                password: document.getElementById('password').value
+            };
+
+            try {
+                const response = await fetch(`${API_URL}/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+
+                if (response.ok) {
+                    const result = await response.json();
+                    localStorage.setItem('token', result.token);
+                    localStorage.setItem('user', JSON.stringify(result.user));
+                    window.location.href = 'dashboard.html';
+                } else {
+                    const error = await response.text();
+                    errorDiv.textContent = error || 'Неверный логин или пароль';
+                    errorDiv.style.display = 'block';
+                }
+            } catch (err) {
+                errorDiv.textContent = 'Ошибка соединения с сервером';
+                errorDiv.style.display = 'block';
+            }
+        });
+
+        document.getElementById('login').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                document.getElementById('password').focus();
+            }
+        });
+    </script>
+</body>
+</html>

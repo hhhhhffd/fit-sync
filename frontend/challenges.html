@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Челленджи - Fitness App</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        .page-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        .page-title h2 {
+            background: linear-gradient(90deg, var(--red-start), var(--red-end));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 1.75rem;
+        }
+        .challenge-card h3 {
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+            padding-right: 80px;
+        }
+        .challenge-meta {
+            display: flex;
+            gap: 1.5rem;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+        .challenge-meta span {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+        .progress-section {
+            margin-top: 1.5rem;
+        }
+        .progress-item {
+            margin-bottom: 1rem;
+        }
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+        .progress-header .name {
+            color: var(--text-primary);
+        }
+        .progress-header .value {
+            color: var(--cyan-start);
+            font-weight: 600;
+        }
+        .invite-code {
+            display: inline-block;
+            background: rgba(0, 240, 255, 0.1);
+            border: 1px solid rgba(0, 240, 255, 0.3);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-family: monospace;
+            color: var(--cyan-start);
+            font-size: 1.1rem;
+        }
+        .form-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+        .back-btn:hover {
+            color: var(--cyan-start);
+        }
+    </style>
+</head>
+<body>
+    <script src="js/app.js"></script>
+    <header>
+        <div class="container">
+            <h1>🔥 Fitness App</h1>
+            <nav>
+                <a href="dashboard.html">Дашборд</a>
+                <a href="profile.html">Профиль</a>
+                <a href="challenges.html">Челленджи</a>
+                <a href="leaderboard.html">Лидерборд</a>
+                <a href="#" onclick="logout()">Выход</a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="page-title">
+            <h2>⚔️ Челленджи</h2>
+            <button onclick="showCreateForm()">➕ Создать челлендж</button>
+        </div>
+
+        <div id="message"></div>
+
+        <div id="createForm" class="card hidden">
+            <h3>Создать челлендж</h3>
+
+            <div class="form-group">
+                <label>Название</label>
+                <input type="text" id="title" placeholder="Например: Пробежать 50 км за неделю">
+            </div>
+
+            <div class="form-group">
+                <label>Описание</label>
+                <textarea id="description" rows="3" placeholder="Опишите правила и условия"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Тип челленджа</label>
+                <select id="challengeType">
+                    <option value="accumulative">📊 Накопительный (сумма значений)</option>
+                    <option value="consistency">📅 Последовательный (дни подряд)</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Цель</label>
+                <input type="number" id="goalValue" min="1" value="10" placeholder="Например: 50 км или 7 дней">
+            </div>
+
+            <div class="form-group">
+                <label>Дата начала</label>
+                <input type="date" id="startDate">
+            </div>
+
+            <div class="form-group">
+                <label>Дата окончания</label>
+                <input type="date" id="endDate">
+            </div>
+
+            <div class="form-actions">
+                <button onclick="createChallenge()">Создать</button>
+                <button class="secondary" onclick="hideCreateForm()">Отмена</button>
+            </div>
+        </div>
+
+        <h3 class="mb-1" style="color: var(--text-secondary);">Мои челленджи</h3>
+        <div id="challengesList" class="grid"></div>
+
+        <div id="challengeDetails" class="hidden">
+            <div class="back-btn" onclick="backToList()">← Назад к списку</div>
+            <div id="detailsContent"></div>
+        </div>
+    </div>
+
+    <script>
+        checkAuth();
+
+        function showCreateForm() {
+            document.getElementById('createForm').classList.remove('hidden');
+            const today = new Date();
+            const nextWeek = new Date(today.getTime() + 7 * 24 * 60 * 60 * 1000);
+            document.getElementById('startDate').valueAsDate = today;
+            document.getElementById('endDate').valueAsDate = nextWeek;
+        }
+
+        function hideCreateForm() {
+            document.getElementById('createForm').classList.add('hidden');
+        }
+
+        async function createChallenge() {
+            const challenge = {
+                title: document.getElementById('title').value,
+                description: document.getElementById('description').value,
+                type: document.getElementById('challengeType').value,
+                goal_value: parseInt(document.getElementById('goalValue').value) || 10,
+                start_date: document.getElementById('startDate').value + 'T00:00:00Z',
+                end_date: document.getElementById('endDate').value + 'T23:59:59Z'
+            };
+
+            if (!challenge.title) {
+                showMessage('message', 'Название обязательно', 'error');
+                return;
+            }
+
+            try {
+                await apiCall('/challenges', {
+                    method: 'POST',
+                    body: JSON.stringify(challenge)
+                });
+
+                hideCreateForm();
+                loadChallenges();
+                showMessage('message', 'Челлендж создан! 🎉', 'success');
+            } catch (error) {
+                showMessage('message', 'Ошибка создания', 'error');
+            }
+        }
+
+        async function loadChallenges() {
+            try {
+                const challenges = await apiCall('/challenges');
+                const list = document.getElementById('challengesList');
+
+                if (challenges.length === 0) {
+                    list.innerHTML = '<p style="color: var(--text-muted); padding: 1rem;">Пока нет челленджей. Создай первый! 💪</p>';
+                    return;
+                }
+
+                list.innerHTML = challenges.map(c => `
+                    <div class="card challenge-card" onclick="viewChallenge(${c.id})" style="cursor: pointer;">
+                        <div class="challenge-status ${c.status}">${c.status === 'active' ? '🔥 Active' : c.status === 'pending' ? '⏳ Pending' : '✅ Done'}</div>
+                        <h3>${c.title}</h3>
+                        <p style="color: var(--text-secondary);">${c.description || 'Без описания'}</p>
+                        <div class="challenge-meta">
+                            <span>${c.type === 'accumulative' ? '📊' : '📅'} ${c.type}</span>
+                            <span>🎯 ${c.goal_value}</span>
+                            <span>📆 ${formatDate(c.start_date)} - ${formatDate(c.end_date)}</span>
+                        </div>
+                    </div>
+                `).join('');
+            } catch (error) {
+                showMessage('message', 'Ошибка загрузки', 'error');
+            }
+        }
+
+        async function viewChallenge(id) {
+            try {
+                const challenge = await apiCall(`/challenges/${id}`);
+                const progress = await apiCall(`/challenges/${id}/progress`);
+
+                document.getElementById('challengesList').classList.add('hidden');
+                document.querySelector('h3.mb-1').classList.add('hidden');
+                document.querySelector('.page-title button').classList.add('hidden');
+                document.getElementById('challengeDetails').classList.remove('hidden');
+
+                const detailsContent = document.getElementById('detailsContent');
+
+                let html = `
+                    <div class="card">
+                        <div class="challenge-status ${challenge.status}">${challenge.status === 'active' ? '🔥 Active' : challenge.status === 'pending' ? '⏳ Pending' : '✅ Done'}</div>
+                        <h2 style="color: var(--text-primary); padding-right: 100px;">${challenge.title}</h2>
+                        <p style="color: var(--text-secondary); margin-top: 0.5rem;">${challenge.description || 'Без описания'}</p>
+
+                        <div class="challenge-meta" style="margin-top: 1.5rem;">
+                            <span>${challenge.type === 'accumulative' ? '📊 Накопительный' : '📅 Последовательный'}</span>
+                            <span>🎯 Цель: ${challenge.goal_value}</span>
+                        </div>
+                        <div class="challenge-meta">
+                            <span>📆 ${formatDate(challenge.start_date)} — ${formatDate(challenge.end_date)}</span>
+                        </div>
+                        
+                        ${challenge.invite_code ? `
+                            <div style="margin-top: 1.5rem;">
+                                <label style="color: var(--text-secondary); font-size: 0.9rem;">Код приглашения:</label>
+                                <div class="invite-code">${challenge.invite_code}</div>
+                            </div>
+                        ` : ''}
+
+                        <div class="progress-section">
+                            <h3 style="color: var(--text-primary); margin-bottom: 1rem;">👥 Прогресс участников</h3>
+                `;
+
+                if (progress && progress.length > 0) {
+                    progress.forEach(p => {
+                        const participant = challenge.participants?.find(u => u.id === p.user_id);
+                        const name = participant?.name || `User #${p.user_id}`;
+                        const percentage = challenge.goal_value > 0 ? Math.min(100, (p.current_progress / challenge.goal_value) * 100) : 0;
+
+                        html += `
+                            <div class="progress-item">
+                                <div class="progress-header">
+                                    <span class="name">${name}</span>
+                                    <span class="value">${p.current_progress} / ${challenge.goal_value}</span>
+                                </div>
+                                <div class="progress-bar ${percentage >= 100 ? 'cyan' : ''}">
+                                    <div class="fill" style="width: ${percentage}%;"></div>
+                                </div>
+                            </div>
+                        `;
+                    });
+                } else {
+                    html += '<p style="color: var(--text-muted);">Пока нет прогресса</p>';
+                }
+
+                html += `
+                        </div>
+                        ${challenge.status !== 'completed' ? `
+                            <button onclick="showAddProgressForm(${id}, '${challenge.type}')" style="margin-top: 1.5rem;">➕ Добавить прогресс</button>
+                        ` : ''}
+                    </div>
+                `;
+
+                html += `
+                    <div id="addProgressForm" class="card hidden mt-1">
+                        <h3 style="color: var(--text-primary);">Добавить прогресс</h3>
+                        <div class="form-group">
+                            <label>Значение ${challenge.type === 'consistency' ? '(введите 1 для отметки)' : ''}</label>
+                            <input type="number" id="progressValue" min="1" value="${challenge.type === 'consistency' ? '1' : ''}" placeholder="10">
+                        </div>
+                        <div class="form-group">
+                            <label>Заметка (опционально)</label>
+                            <textarea id="progressNotes" rows="2" placeholder="Как прошла тренировка?"></textarea>
+                        </div>
+                        <div class="form-actions">
+                            <button onclick="submitProgress(${id})">Сохранить</button>
+                            <button class="secondary" onclick="hideAddProgressForm()">Отмена</button>
+                        </div>
+                    </div>
+                `;
+
+                detailsContent.innerHTML = html;
+            } catch (error) {
+                showMessage('message', 'Ошибка загрузки', 'error');
+            }
+        }
+
+        function backToList() {
+            document.getElementById('challengesList').classList.remove('hidden');
+            document.querySelector('h3.mb-1').classList.remove('hidden');
+            document.querySelector('.page-title button').classList.remove('hidden');
+            document.getElementById('challengeDetails').classList.add('hidden');
+        }
+
+        function showAddProgressForm(id, type) {
+            document.getElementById('addProgressForm').classList.remove('hidden');
+        }
+
+        function hideAddProgressForm() {
+            document.getElementById('addProgressForm').classList.add('hidden');
+        }
+
+        async function submitProgress(challengeId) {
+            const value = parseInt(document.getElementById('progressValue').value);
+            const notes = document.getElementById('progressNotes').value;
+
+            if (!value || value <= 0) {
+                showMessage('message', 'Введите корректное значение', 'error');
+                return;
+            }
+
+            try {
+                await apiCall(`/challenges/${challengeId}/progress`, {
+                    method: 'POST',
+                    body: JSON.stringify({ value, notes })
+                });
+
+                showMessage('message', 'Прогресс добавлен! 💪', 'success');
+                hideAddProgressForm();
+                viewChallenge(challengeId);
+            } catch (error) {
+                showMessage('message', 'Ошибка', 'error');
+            }
+        }
+
+        loadChallenges();
+    </script>
+</body>
+</html>
